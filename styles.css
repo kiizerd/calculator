@@ -1,0 +1,91 @@
+:root {
+    --back: #32363f;
+}
+
+html {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+}
+
+body {
+    background-color: #aaaaaa;
+}
+
+#wrapper {
+    width: 87%;
+    margin: 0 auto;
+    background-color: #888;
+}
+
+.scripted {
+    border: solid 1px black;
+}
+
+#display {
+    background-color: var(--back);
+    height: 2em;
+}
+
+#buttons {
+}
+
+#numpad {
+    grid-area: nums;
+    background-color: var(--back);
+}
+
+#operators {
+    grid-area: opers;
+    background-color: var(--back);
+}
+
+.square_btn{
+    display: inline-block;
+    position: relative;
+    padding: 1.5em 1.75em;
+    margin: 0.1em 0.1em;
+    text-decoration: none;
+    background: #668ad8;/*Button Color*/
+    color: #FFF;
+    border-bottom: solid 5px #36528c;/*daker than background*/
+    border-right: solid 5px #5375bd;/*darker than background*/
+}
+
+.square_btn:before{    
+    content: " ";
+    position: absolute;
+    bottom: -5px;
+    left: -1px;
+    width: 0;
+    height: 0;
+    border-width: 0 6px 6px 0px;
+    border-style: solid;
+    border-color: transparent;
+}
+
+.square_btn:after{   
+    content: " ";
+    position: absolute;
+    top: -1px;
+    right: -5px;
+    width: 0;
+    height: 0;
+    border-width: 0px 6px 6px 0px;
+    border-style: solid;
+    border-color: transparent;
+    border-bottom-color: transparent;
+}
+
+.square_btn:active{ /*on click*/
+    border:none;
+    -ms-transform: translate(6px,6px);
+    -webkit-transform: translate(6px,6px);
+    transform: translate(6px,6px);/*move LowerRight*/
+}
+
+.square_btn:active:after,
+.square_btn:active:before {/*on click*/
+    content: none;/*Border disappears*/
+}
