@@ -64,7 +64,7 @@ buttonFunction = (input) => {
         switch (btnID) {
             case 'eql-btn':
                 updateLog();
-                operand1 = '';
+                operand1 = undefined;
                 operand2 = '';
                 operator = '';
                 displayValue.textContent = '';
