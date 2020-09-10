@@ -1,5 +1,7 @@
 :root {
     --back: #32363f;
+    --btnWidth: 0;
+    --calcWith:
 }
 
 html {
@@ -13,32 +15,111 @@ body {
     background-color: #aaaaaa;
 }
 
+ul {
+    list-style-type: none;
+}
+
 #wrapper {
     width: 87%;
     margin: 0 auto;
     background-color: #888;
+    border: solid 1px black;
+    border-radius: 10px;
 }
 
 .scripted {
     border: solid 1px black;
+    border-radius: 10px;
+}
+
+#calculator {
+    padding: 15px;
 }
 
 #display {
     background-color: var(--back);
-    height: 2em;
+    height: 8em;
+    width: 84.33%;
+    margin: 0 auto;
+    display: grid;
+    grid-template: 
+    "eqt-log crt-ttl"
+    "dpy-val crt-ttl"
+    / 3fr 1fr;
+}
+
+#equation-log {
+    padding: 0;
+    grid-area: 'eqt-log';
+    color: rgba(252, 163, 103, 0.712);
+    font-size: 26px;
+    margin: 0 5px 0 5px;
+    align-self: end;
+}
+
+#display-value {
+    grid-area: 'dpy-val';
+    color: rgb(252, 162, 103);
+    font-size: 26px;
+    margin: 0 5px 0 5px;
+    align-self: end;
+}
+
+#current-total {
+    grid-area: crt-ttl;
+    color: rgb(252, 162, 103);
+    font-size: 28px;
+    margin: 0 5px 0 5px;
+    align-self: end;
 }
 
 #buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#functions {
+    width: 84.33%;
+    background-color: var(--back);
+    display: flex;
+}
+
+#functions * {
+    flex-grow: 1;
+}
+
+#undo-btn #clr-btn {
+    flex-grow: .8;
+    align-self: flex-end;
 }
 
 #numpad {
+    width: 50%;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
     grid-area: nums;
     background-color: var(--back);
+    display: grid;
+    grid-template-areas: 
+    "num7 num8 num9"
+    "num4 num5 num6"
+    "num1 num2 num3"
+    "num0 num0 dotbtn";    
 }
 
 #operators {
+    width: 33.33%;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
     grid-area: opers;
     background-color: var(--back);
+    display: grid;
+    grid-template-areas:
+    "divbtn multbtn"
+    "minbtn addbtn"
+    "pobtn   pcbtn" 
+    "eqlbtn   eqlbtn";
 }
 
 .square_btn{
@@ -47,45 +128,10 @@ body {
     padding: 1.5em 1.75em;
     margin: 0.1em 0.1em;
     text-decoration: none;
-    background: #668ad8;/*Button Color*/
-    color: #FFF;
-    border-bottom: solid 5px #36528c;/*daker than background*/
-    border-right: solid 5px #5375bd;/*darker than background*/
-}
-
-.square_btn:before{    
-    content: " ";
-    position: absolute;
-    bottom: -5px;
-    left: -1px;
-    width: 0;
-    height: 0;
-    border-width: 0 6px 6px 0px;
-    border-style: solid;
-    border-color: transparent;
-}
-
-.square_btn:after{   
-    content: " ";
-    position: absolute;
-    top: -1px;
-    right: -5px;
-    width: 0;
-    height: 0;
-    border-width: 0px 6px 6px 0px;
-    border-style: solid;
-    border-color: transparent;
-    border-bottom-color: transparent;
-}
-
-.square_btn:active{ /*on click*/
-    border:none;
-    -ms-transform: translate(6px,6px);
-    -webkit-transform: translate(6px,6px);
-    transform: translate(6px,6px);/*move LowerRight*/
-}
-
-.square_btn:active:after,
-.square_btn:active:before {/*on click*/
-    content: none;/*Border disappears*/
+    background: #263a96;/*Button Color*/
+    color: rgb(252, 162, 103);
+    font-size: 26px;
+    border-radius: 10px;
+    border-bottom: solid 5px #151d44d8;/*daker than background*/
+    border-right: solid 5px #192768d8;/*darker than background*/
 }
