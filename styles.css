@@ -12,7 +12,7 @@ html {
 }
 
 body {
-    background-color: #aaaaaa;
+    background-color: #ccc;
 }
 
 ul {
@@ -51,24 +51,24 @@ ul {
 #equation-log {
     padding: 0;
     grid-area: 'eqt-log';
-    color: rgba(252, 163, 103, 0.712);
-    font-size: 26px;
+    color: #78fffd;
+    font-size: 28px;
     margin: 0 5px 0 5px;
     align-self: end;
 }
 
 #display-value {
     grid-area: 'dpy-val';
-    color: rgb(252, 162, 103);
-    font-size: 26px;
+    color: #78fffd;
+    font-size: 32px;
     margin: 0 5px 0 5px;
     align-self: end;
 }
 
 #current-total {
     grid-area: crt-ttl;
-    color: rgb(252, 162, 103);
-    font-size: 28px;
+    color: #78fffd;
+    font-size: 36px;
     margin: 0 5px 0 5px;
     align-self: end;
 }
@@ -129,7 +129,7 @@ ul {
     margin: 0.1em 0.1em;
     text-decoration: none;
     background: #263a96;/*Button Color*/
-    color: rgb(252, 162, 103);
+    color: #ff9a78;
     font-size: 26px;
     border-radius: 10px;
     border-bottom: solid 5px #151d44d8;/*daker than background*/

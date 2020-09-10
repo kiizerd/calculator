@@ -13,144 +13,146 @@ const operators = elementsArray[4];
 const numpadBtns = [];
 const operatorBtns = [];
 const functionBtns = [];
-const equationLog = [];
+const parenthesesArray = [];
+let equationLog = [];
 
-let lastInput;
+let equalBtnElement = {};
+
+let inputList = [];
+let lastInput = inputList[(inputList.length - 1)];
+let lastOp;
 let operand1 = '';
 let operand2 = '';
 let operator = '';
-let displayString = ''; 
+let currentEval = []; 
 let currentTotal = '';
-let perentheses = false;
+let parentheses = false;
+let decimal = false;
 
-updateLog = () => {
+
+undoLast = () => {
+
+}
+
+
+handleInput = (input) => {
     const newEq = document.createElement("li");
-    newEq.textContent = (`${operand1}  ` + `  ${operator}  ` + 
-    `  ${operand2}  ` + '  =  ' + `  ${currentTotal}`);
-    if (equationLog.length >= 3) {
+    const inputText = input.textContent
 
-    }
-    equationLogElement.append(newEq);
-    equationLog.push(newEq);
-};
-
-calculate = () => {
-    let btnString = lastInput.textContent;
-    let btnID = lastInput.id;
-    switch (operator) {
-        case '+':
-            return (+operand1) + (+operand2);
-        case '-':
-            return +operand1 - +operand2;
-        case '*':
-            return +operand1 * +operand2;
-        case '/':
-            return +operand1 / +operand2;
-        case '%':
-            return (operand1 / 100)
-        case decodeURI('%C2%B2'):
-            return operand1 * operand1;
-        default:
-            break;
-    }
-};
-
-buttonFunction = (input) => {
-    let btnString = input.textContent;
-    let btnID = input.id;
-    if (operator && operand1 && operand2) {
-        currentTotal = calculate();
-        currentTotalElement.textContent = currentTotal;
-        switch (btnID) {
-            case 'eql-btn':
-                updateLog();
-                operand1 = undefined;
-                operand2 = '';
-                operator = '';
-                displayValue.textContent = '';
-                break;
-            case 'add-btn':
-                operand1 = currentTotal;
-                operator = '+';
-                operand2 = '';
-                break;
-            case 'min-btn':
-                operand1 = currentTotal;
-                operator = '-';
-                operand2 = '';
-                break;
-            case 'times-btn':
-                operand1 = currentTotal;
-                operator = '*';
-                operand2 = '';
-                break;
-            case 'divide-btn':
-                operator1 = currentTotal;
-                operator = '/';
-                operand2 = '';
-                break;
-            default:
-                break;
-        }
-    } else if (operand1) {
-        switch (btnID) {
-            case 'add-btn':
-                operator = '+';
-                break;
-            case 'minus-btn':
-                operator = '-';
-                break;
-            case 'times-btn':
-                operator = '*';
-                break;
-            case 'divide-btn':
-                operator = '/';
-                break;
-            case 'pc-btn':
-                operator = ')';
-                break;
-            case 'percent-btn':
-                operator = '%';
-                break;
-            case 'square-btn':
-                operator = decodeURI('%C2%B2');
-                break;
-            default:
-                break;
-        }
-        displayValue.textContent += `  ${btnString}  `;
-    }
-};
-
-updateDisplay = (input) => {
-    console.log(input)
-    console.log(currentTotal);
-    lastInput = input;
-    let btnString = input.textContent;
-    if (!operand2 && !operator) {
-        if (btnString.match(/[0-9]/)) {
-            displayValue.textContent += btnString;
-            operand1 += btnString;
-        } else if (btnString === '(') {
-            displayValue.textContent += btnString;
-            perentheses = true;
+    
+    calculate = (input) => {
+        if (input) { //if function btn returned as param
+            let opd = !operand2 ? operand1 : operand2;
+            let clrUndo;
+            switch (input) {
+                case functionBtns[0]: //percent
+                    opd = opd / 100;
+                    clrUndo = false;
+                    break;
+                case functionBtns[1]: //square
+                    opd = opd * opd;
+                    clrUndo = false;
+                    break;
+                case functionBtns[2]:
+                    opd = Math.sqrt(opd);
+                    clrUndo = false;
+                    break;
+                case functionBtns[3]:
+                    displayValue.textContent.replace(lastInput.textContent, '');
+                    undoLast(lastInput);
+                    clrUndo = true;
+                    break;
+                case functionBtns[4]:
+                    operand1 = '';
+                    operand2 = '';
+                    operator = '';
+                    equationLog.length = 0;
+                    equationLogElement.textContent = '';
+                    currentTotal = '';
+                    displayValue.textContent = currentTotal;
+                    currentTotalElement.textContent = '';
+                    clrUndo = true;
+                    break;
+                default:
+                    break;
+            }
+            if (clrUndo) return
+            operand1 = opd;
+            currentTotal = opd;
+            currentTotalElement.textContent = currentTotal;
         } else {
-            buttonFunction(input);
-        }        
-    } else if (operator) {
-        if (btnString.match(/[0-9]/)) {
-            displayValue.textContent += btnString;
-            operand2 += btnString;
-        } else if (btnString === '(') {
-            displayValue.textContent += btnString;
-            perentheses = true;
-        } else {
-            buttonFunction(input);
+            //
+            currentTotal = eval(`${operand1}` + `${operator}` + `${operand2}`);
+            currentTotalElement.textContent = currentTotal;
+            return currentTotal;
         }
-        currentTotalElement.textContent = calculate()
     }
 
-};
+
+    if (!operand2) {
+        if (!operator) {
+            if (numpadBtns.includes(input)) {
+                displayValue.textContent += inputText;
+                operand1 += inputText
+                calculate();
+                lastOp = 'op1';
+            } else if (operatorBtns.includes(input)) {
+                displayValue.textContent += '  ' + inputText + '  ';
+                operator = inputText;
+                lastOp = 'opr';
+            } else if (functionBtns.includes(input)) {
+                displayValue.textContent += inputText;
+                calculate(input);
+                lastOp = 'func';
+            }
+        } else {
+            if (numpadBtns.includes(input)) {
+                displayValue.textContent += inputText;
+                operand2 += inputText;
+                calculate();
+                lastOp = 'op1';
+            } else if (operatorBtns.includes(input)) {
+                displayValue.textContent += '  ' + inputText + '  ';
+                operator = inputText;
+                lastOp = 'opr';
+            } else if (functionBtns.includes(input)) {
+                calculate(input);
+                lastOp = 'func';
+            }
+        }
+    } else {
+        if (numpadBtns.includes(input)) {
+            displayValue.textContent += inputText; 
+            operand2 += inputText;
+            calculate();
+            lastOp = 'op2';
+        } else if (operatorBtns.includes(input)) {
+            calculate();
+            operand1 = currentTotal;
+            operand2 = '';
+            displayValue.textContent += '  ' + inputText + '  ';
+            operator = inputText;
+            lastOp = 'opr';
+        } else if (functionBtns.includes(input)) {
+            calculate(input);
+            operand1 = currentTotal;
+            operand2 = '';
+            displayValue.textContent += '  ' + inputText + '  ';
+        } else if (input == equalBtnElement) {
+            calculate()
+            newEq.textContent = displayValue.textContent + ' = ' + `${currentTotal}`;
+            equationLogElement.append(newEq);
+            operand1 = currentTotal;
+            operand2 = '';
+            operator = '';
+            displayValue.textContent = operand1;
+        }
+    }
+    inputList.push({
+        obj: input,
+        op: lastOp,
+    })
+}
 
 
 createButtons = () => {
@@ -169,7 +171,7 @@ createButtons = () => {
         numpadBtns.push(newBtn);
         numpad.append(newBtn);
         newBtn.addEventListener('click', () => {
-            updateDisplay(newBtn);
+            handleInput(newBtn);
         });
     } //num buttons
     for (let i = 0; i < 7; i++) {
@@ -213,10 +215,16 @@ createButtons = () => {
             default:
                 break;
         }
-        operatorBtns.push(newBtn);
+        if (i === 5 || i === 6) {
+            parenthesesArray.push(newBtn);
+        } else if (i === 4) {
+            equalBtnElement = newBtn;
+        } else {
+            operatorBtns.push(newBtn);
+        }
         operators.append(newBtn);
         newBtn.addEventListener('click', () => {
-            updateDisplay(newBtn);
+            handleInput(newBtn);
         });
     } //operator buttons
     for (let i = 0; i < 5; i++) {
@@ -254,10 +262,9 @@ createButtons = () => {
         functionBtns.push(newBtn);
         functions.append(newBtn);
         newBtn.addEventListener('click', () => {
-            updateDisplay(newBtn);
+            handleInput(newBtn);
         });
     } //function butttons
-
 };
 
 createButtons();
