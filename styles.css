@@ -1,7 +1,10 @@
 :root {
-    --back: #32363f;
+    --back: #494c55;
+    --display: #67d8fa;
     --btnWidth: 0;
     --calcWith:
+    --angle: 8px;
+    --angle-o: 4px;
 }
 
 html {
@@ -24,20 +27,15 @@ ul {
     margin: 0 auto;
     background-color: #888;
     border: solid 1px black;
-    border-radius: 10px;
-}
-
-.scripted {
-    border: solid 1px black;
-    border-radius: 10px;
 }
 
 #calculator {
-    padding: 15px;
+    padding: 25px;
 }
 
 #display {
-    background-color: var(--back);
+    border: solid 1px black;
+    background-color: #32363f;
     height: 8em;
     width: 84.33%;
     margin: 0 auto;
@@ -51,7 +49,7 @@ ul {
 #equation-log {
     padding: 0;
     grid-area: 'eqt-log';
-    color: #78fffd;
+    color: var(--display);
     font-size: 28px;
     margin: 0 5px 0 5px;
     align-self: end;
@@ -59,7 +57,7 @@ ul {
 
 #display-value {
     grid-area: 'dpy-val';
-    color: #78fffd;
+    color: var(--display);
     font-size: 32px;
     margin: 0 5px 0 5px;
     align-self: end;
@@ -67,7 +65,7 @@ ul {
 
 #current-total {
     grid-area: crt-ttl;
-    color: #78fffd;
+    color: var(--display);
     font-size: 36px;
     margin: 0 5px 0 5px;
     align-self: end;
@@ -83,6 +81,7 @@ ul {
     width: 84.33%;
     background-color: var(--back);
     display: flex;
+
 }
 
 #functions * {
@@ -95,9 +94,8 @@ ul {
 }
 
 #numpad {
+    border-bottom-left-radius: 4%;
     width: 50%;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
     grid-area: nums;
     background-color: var(--back);
     display: grid;
@@ -109,9 +107,8 @@ ul {
 }
 
 #operators {
+    border-bottom-right-radius: 4%;
     width: 33.33%;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
     grid-area: opers;
     background-color: var(--back);
     display: grid;
@@ -122,16 +119,24 @@ ul {
     "eqlbtn   eqlbtn";
 }
 
-.square_btn{
+.square_btn {
+    flex-shrink: 3;
     display: inline-block;
     position: relative;
-    padding: 1.5em 1.75em;
-    margin: 0.1em 0.1em;
+    padding: 2vh 2vw;
+    margin: 1vh 1.5vw;
     text-decoration: none;
-    background: #263a96;/*Button Color*/
-    color: #ff9a78;
+    background: #3047ac;/*Button Color*/
+    color: #fad765;
     font-size: 26px;
-    border-radius: 10px;
-    border-bottom: solid 5px #151d44d8;/*daker than background*/
-    border-right: solid 5px #192768d8;/*darker than background*/
+    border-radius: 8%;
+    /* border-bottom: solid 5px #151d44d8;/*darker than background
+    border-right: solid 5px #192768d8;/*darker than background */
+    transition: all .15s
+    linear 0s;
+    box-shadow: -0.37vh 0.43vw 0 #151d44d8;
+}
+
+:hover.square_btn {
+    box-shadow: -0.185vh 0.21vw 0 #151d44d8;
 }

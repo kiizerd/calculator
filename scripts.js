@@ -25,15 +25,22 @@ let lastOp;
 let operand1 = '';
 let operand2 = '';
 let operator = '';
-let currentEval = []; 
+let currentEval = [];
 let currentTotal = '';
 let parentheses = false;
 let decimal = false;
+let longEq = false;
 
 
 undoLast = () => {
     lastInput = inputList[inputList.length - 1];
     lastOp = lastInput.op;
+    //if last op is 1 or 2 displayValue.textContent
+    //.slice(indexOf(lastInput.textContext))
+    //recalc and reset values 
+    //if opr remove opr and slice index of '' display
+    //recalc and reset
+    //if func remove func text recalc and reset
 }
 
 
@@ -41,7 +48,7 @@ handleInput = (input) => {
     const newEq = document.createElement("li");
     const inputText = input.textContent
 
-    
+
     calculate = (input) => {
         if (input) { //if function btn
             let opd = !operand2 ? operand1 : operand2;
@@ -76,10 +83,10 @@ handleInput = (input) => {
             }
             if (clrUndo) return;
             else {
-            currentTotal = operand2 ? Number(operand1) + opd : opd;
-            operand1 = opd;
-            displayValue.textContent += inputText;
-            currentTotalElement.textContent = currentTotal;
+                currentTotal = opd;
+                operand1 = opd;
+                displayValue.textContent += inputText;
+                currentTotalElement.textContent = currentTotal;
             }
         } else {
             if (operator === '/' && operand2 === '0') {
@@ -97,6 +104,12 @@ handleInput = (input) => {
     if (!operand2) {
         if (!operator) {
             if (numpadBtns.includes(input)) {
+                if (input === numpadBtns[0]) {
+                    if (decimal) {
+                        return
+                    }
+                    decimal = true
+                } 
                 displayValue.textContent += inputText;
                 operand1 += inputText
                 calculate();
@@ -122,7 +135,7 @@ handleInput = (input) => {
                 displayValue.textContent += inputText;
                 operand2 += inputText;
                 calculate();
-                lastOp = 'op1';
+                lastOp = 'op2';
             } else if (operatorBtns.includes(input)) {
                 displayValue.textContent += '  ' + inputText + '  ';
                 operator = inputText;
@@ -134,7 +147,7 @@ handleInput = (input) => {
         }
     } else {
         if (numpadBtns.includes(input)) {
-            displayValue.textContent += inputText; 
+            displayValue.textContent += inputText;
             operand2 += inputText;
             calculate();
             lastOp = 'op2';
@@ -142,6 +155,7 @@ handleInput = (input) => {
             calculate();
             operand1 = currentTotal;
             operand2 = '';
+            longEq = true;
             displayValue.textContent += '  ' + inputText + '  ';
             operator = inputText;
             lastOp = 'opr';
@@ -163,6 +177,7 @@ handleInput = (input) => {
             operand1 = currentTotal;
             operand2 = '';
             operator = '';
+            lastOp = 'eql';
             displayValue.textContent = operand1;
         }
     }
@@ -176,13 +191,13 @@ handleInput = (input) => {
 createButtons = () => {
     for (let i = 0; i < 11; i++) {
         const newBtn = document.createElement("button");
-        if ( i === 0) {
+        if (i === 0) {
             newBtn.textContent = '.';
             newBtn.id = 'dot-btn';
             newBtn.style.gridArea = 'dotbtn';
         } else {
             newBtn.textContent = i - 1;
-            newBtn.id = 'numpad' +  `${i - 1}`;
+            newBtn.id = 'numpad' + `${i - 1}`;
             newBtn.style.gridArea = `num${i - 1}`
         }
         newBtn.classList.add('square_btn');
@@ -199,37 +214,37 @@ createButtons = () => {
             case 0:
                 newBtn.id = 'divide-btn';
                 newBtn.textContent = '/';
-                newBtn.style.gridArea = 'divbtn'; 
+                newBtn.style.gridArea = 'divbtn';
                 break;
             case 1:
                 newBtn.id = 'times-btn';
                 newBtn.textContent = '*';
-                newBtn.style.gridArea = 'multbtn'; 
+                newBtn.style.gridArea = 'multbtn';
                 break;
             case 2:
                 newBtn.id = 'minus-btn';
                 newBtn.textContent = '-';
-                newBtn.style.gridArea = 'minbtn'; 
+                newBtn.style.gridArea = 'minbtn';
                 break;
             case 3:
                 newBtn.id = 'add-btn';
                 newBtn.textContent = '+';
                 newBtn.style.gridArea = 'addbtn';
-                break; 
+                break;
             case 4:
                 newBtn.id = 'eql-btn';
                 newBtn.textContent = '=';
                 newBtn.style.gridArea = 'eqlbtn';
                 break;
             case 5:
-                newBtn.id ='po-btn';
+                newBtn.id = 'po-btn';
                 newBtn.textContent = '(';
                 newBtn.style.gridArea = 'pobtn';
                 break;
             case 6:
                 newBtn.id = 'pc-btn';
                 newBtn.textContent = ')';
-                newBtn.style.gridArea = 'pcbtn';    
+                newBtn.style.gridArea = 'pcbtn';
             default:
                 break;
         }
@@ -273,7 +288,7 @@ createButtons = () => {
                 newBtn.id = 'clr-btn';
                 newBtn.textContent = 'C';
                 newBtn.style.grid = 'clrbtn';
-                break;        
+                break;
             default:
                 break;
         }
