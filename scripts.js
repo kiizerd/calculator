@@ -14,12 +14,13 @@ const numpadBtns = [];
 const operatorBtns = [];
 const functionBtns = [];
 const parenthesesArray = [];
+
 let equationLog = [];
 
 let equalBtnElement = {};
 
 let inputList = [];
-let lastInput = inputList[(inputList.length - 1)];
+let lastInput;
 let lastOp;
 let operand1 = '';
 let operand2 = '';
@@ -31,7 +32,8 @@ let decimal = false;
 
 
 undoLast = () => {
-
+    lastInput = inputList[inputList.length - 1];
+    lastOp = lastInput.op;
 }
 
 
@@ -41,28 +43,24 @@ handleInput = (input) => {
 
     
     calculate = (input) => {
-        if (input) { //if function btn returned as param
+        if (input) { //if function btn
             let opd = !operand2 ? operand1 : operand2;
-            let clrUndo;
+            let clrUndo = false;
             switch (input) {
                 case functionBtns[0]: //percent
                     opd = opd / 100;
-                    clrUndo = false;
                     break;
                 case functionBtns[1]: //square
                     opd = opd * opd;
-                    clrUndo = false;
                     break;
-                case functionBtns[2]:
+                case functionBtns[2]: //sqr-rt
                     opd = Math.sqrt(opd);
-                    clrUndo = false;
                     break;
-                case functionBtns[3]:
-                    displayValue.textContent.replace(lastInput.textContent, '');
-                    undoLast(lastInput);
+                case functionBtns[3]: //undo
+                    undoLast();
                     clrUndo = true;
                     break;
-                case functionBtns[4]:
+                case functionBtns[4]: //clear
                     operand1 = '';
                     operand2 = '';
                     operator = '';
@@ -76,15 +74,22 @@ handleInput = (input) => {
                 default:
                     break;
             }
-            if (clrUndo) return
+            if (clrUndo) return;
+            else {
+            currentTotal = operand2 ? Number(operand1) + opd : opd;
             operand1 = opd;
-            currentTotal = opd;
+            displayValue.textContent += inputText;
             currentTotalElement.textContent = currentTotal;
+            }
         } else {
-            //
-            currentTotal = eval(`${operand1}` + `${operator}` + `${operand2}`);
-            currentTotalElement.textContent = currentTotal;
-            return currentTotal;
+            if (operator === '/' && operand2 === '0') {
+                currentTotalElement.textContent = 'CPU melted'
+                return
+            } else {
+                currentTotal = eval(`${operand1}` + `${operator}` + `${operand2}`);
+                currentTotalElement.textContent = currentTotal;
+                return currentTotal;
+            }
         }
     }
 
@@ -96,12 +101,19 @@ handleInput = (input) => {
                 operand1 += inputText
                 calculate();
                 lastOp = 'op1';
+            } else if (parenthesesArray.includes(input) && false) {
+                if (input === parenthesesArray[0]) {
+                    displayValue.textContent += inputText;
+                    parentheses = true;
+                } else {
+                    displayValue.textContent += inputText;
+                    parentheses = false;
+                }
             } else if (operatorBtns.includes(input)) {
                 displayValue.textContent += '  ' + inputText + '  ';
                 operator = inputText;
                 lastOp = 'opr';
             } else if (functionBtns.includes(input)) {
-                displayValue.textContent += inputText;
                 calculate(input);
                 lastOp = 'func';
             }
@@ -137,11 +149,17 @@ handleInput = (input) => {
             calculate(input);
             operand1 = currentTotal;
             operand2 = '';
-            displayValue.textContent += '  ' + inputText + '  ';
         } else if (input == equalBtnElement) {
             calculate()
             newEq.textContent = displayValue.textContent + ' = ' + `${currentTotal}`;
-            equationLogElement.append(newEq);
+            if (equationLog.length < 3) {
+                equationLogElement.append(newEq);
+                equationLog.push(newEq.textContent);
+            } else {
+                equationLogElement.removeChild(equationLogElement.childNodes[0])
+                equationLogElement.append(newEq);
+                equationLog.push(newEq.textContent);
+            }
             operand1 = currentTotal;
             operand2 = '';
             operator = '';
